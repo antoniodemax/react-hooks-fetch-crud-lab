@@ -1,9 +1,9 @@
-// QuestionList.js
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import QuestionItem from "./QuestionItem";
 
 function QuestionList() {
   const [questions, setQuestions] = useState([]);
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -14,11 +14,12 @@ function QuestionList() {
         const data = await response.json();
         setQuestions(data);
       } catch (error) {
-        console.log("Error fetching questions:", error);
+        console.error("Error fetching questions:", error);
       }
     };
+
     fetchQuestions();
-  }, []); // empty array
+  }, []); // Empty dependency array ensures useEffect runs only on mount
 
   const handleDelete = async (id) => {
     try {
@@ -39,7 +40,11 @@ function QuestionList() {
       <h1>Quiz Questions</h1>
       <ul>
         {questions.map((question) => (
-          <QuestionItem key={question.id} question={question} onDelete={handleDelete} />
+          <QuestionItem
+            key={question.id}
+            question={question}
+            onDelete={() => handleDelete(question.id)}
+          />
         ))}
       </ul>
     </section>
